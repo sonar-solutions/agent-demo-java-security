@@ -27,11 +27,12 @@ public class DBUtils {
     public List<String> findItem(String itemId) throws Exception {
         String query = "SELECT item_id FROM items WHERE item_id = '" + itemId  + "'";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
-        List<String> items = new ArrayList<String>();
-        while (resultSet.next()){
-            items.add(resultSet.getString(0));
-        }
-        return items;
+        // ResultSet resultSet = statement.executeQuery(query);
+        // List<String> items = new ArrayList<String>();
+        // while (resultSet.next()){
+        //     items.add(resultSet.getString(0));
+        // }
+        List<String> myStringList = new ArrayList<>();
+        return myStringList;
     }
 }
