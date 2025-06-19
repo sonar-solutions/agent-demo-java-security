@@ -33,10 +33,14 @@ public class Insecure {
 
   public String taintedSQL(HttpServletRequest request, Connection connection) throws Exception {
     String user = request.getParameter("user");
-    String query = "SELECT userid FROM users WHERE username = '" + user  + "'";
-    Statement statement = connection.createStatement();
-    ResultSet resultSet = statement.executeQuery(query);
-    return resultSet.getString(0);
+    String query = "SELECT userid FROM users WHERE username = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(query);
+    preparedStatement.setString(1, user);
+    ResultSet resultSet = preparedStatement.executeQuery();
+    if (resultSet.next()) {
+        return resultSet.getString(1);
+    }
+    return null;
   }
   
   public String hotspotSQL(Connection connection, String user) throws Exception {
