@@ -1,6 +1,5 @@
 package demo.security.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 
 import javax.crypto.Cipher;
@@ -11,9 +10,6 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.*;
 
 public class Utils {
@@ -30,8 +26,14 @@ public class Utils {
     }
 
     public static void deleteFile(String fileName) throws IOException {
-        File file = new File(fileName);
-        FileUtils.forceDelete(file);
+        File baseDir = new File(System.getProperty("user.dir"));
+        String basePath = baseDir.getCanonicalPath() + File.separator;
+        File file = new File(baseDir, fileName);
+        String filePath = file.getCanonicalPath();
+        if (!filePath.startsWith(basePath)) {
+            throw new IOException("Entry is outside of the target directory");
+        }
+        FileUtils.forceDelete(new File(filePath));
     }
 
     public static void executeJs(String input) throws ScriptException {
