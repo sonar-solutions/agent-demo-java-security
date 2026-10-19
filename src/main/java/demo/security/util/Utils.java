@@ -6,6 +6,7 @@ import org.apache.commons.io.FileUtils;
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -37,7 +38,9 @@ public class Utils {
     public static void executeJs(String input) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
-        engine.eval(input);
+        Bindings bindings = engine.createBindings();
+        bindings.put("input", input);
+        engine.eval("input", bindings);
     }
 
     public static void encrypt(byte[] key, byte[] ptxt) throws Exception {
