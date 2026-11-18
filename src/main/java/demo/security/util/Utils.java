@@ -7,6 +7,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.script.Bindings;
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -38,9 +39,12 @@ public class Utils {
     public static void executeJs(String input) throws ScriptException {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
-        Bindings bindings = engine.createBindings();
+        if (engine == null) {
+            throw new ScriptException("No JavaScript engine available");
+        }
+        Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
         bindings.put("input", input);
-        engine.eval("input", bindings);
+        engine.eval("input");
     }
 
     public static void encrypt(byte[] key, byte[] ptxt) throws Exception {
